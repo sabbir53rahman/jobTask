@@ -1,0 +1,191 @@
+"use client";
+import { useState } from "react";
+import Image from "next/image";
+import { X, User, Lock, Settings, MoreVertical } from "lucide-react";
+import DynamicModal from "./DynamicModal";
+import user from "@/assets/demoUser.png";
+
+interface AccountModalProps {
+    onClose: () => void;
+}
+
+export default function AccountModal({ onClose }: AccountModalProps) {
+    const [activeTab, setActiveTab] = useState("Profile");
+    const [showDynamic, setShowDynamic] = useState<null | "email" | "phone">(null);
+
+    const tabs = [
+        { name: "Profile", icon: <User size={18} /> },
+        { name: "Security", icon: <Lock size={18} /> },
+        { name: "Preferences", icon: <Settings size={18} /> },
+    ];
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4">
+            <div className="relative flex flex-col md:flex-row w-full max-w-[880px] max-h-[90vh] bg-white rounded-2xl shadow-2xl overflow-hidden">
+                {/* Sidebar */}
+                <div className="w-full md:w-[260px] border-b md:border-b-0 md:border-r border-gray-200 bg-white py-6">
+                    <h2 className="px-6 text-[15px] font-medium text-gray-800 mb-4 md:mb-6">
+                        Account
+                    </h2>
+                    <nav className="flex md:flex-col overflow-x-auto md:overflow-visible">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.name}
+                                onClick={() => setActiveTab(tab.name)}
+                                className={`flex items-center gap-2 px-4 md:px-6 py-3 text-sm font-medium text-gray-700 whitespace-nowrap transition-all ${activeTab === tab.name
+                                    ? "bg-gray-100 text-gray-900"
+                                    : "hover:bg-gray-50"
+                                    }`}
+                            >
+                                {tab.icon}
+                                {tab.name}
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+
+                {/* Main Content */}
+                <div className="flex-1 relative bg-white p-6 md:p-10 overflow-y-auto">
+                    {/* Close button */}
+                    <button
+                        onClick={onClose}
+                        className="absolute top-4 right-4 rounded-lg hover:bg-gray-100 p-1.5"
+                    >
+                        <X className="w-5 h-5 text-gray-600" />
+                    </button>
+
+                    <h3 className="text-[17px] font-semibold text-gray-900 mb-10">
+                        Profile details
+                    </h3>
+
+                    <div className="space-y-8">
+                        {/* === PROFILE === */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+                            <p className="text-sm font-medium text-gray-600">Profile</p>
+                            <div className="flex items-center gap-4">
+                                <div className="relative w-16 h-16 rounded-full overflow-hidden">
+                                    <Image
+                                        src={user}
+                                        alt="Profile"
+                                        fill
+                                        className="size-8 rounded-full"
+                                    />
+                                </div>
+                                <p className="text-[15px] font-medium text-gray-900">Faisal BH</p>
+                            </div>
+                            <button className="text-sm text-[#6941C6] font-medium hover:underline text-left md:text-right">
+                                Update profile
+                            </button>
+                        </div>
+
+                        <div className="border-t border-gray-200" />
+
+                        {/* === EMAIL ADDRESSES === */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 items-start gap-4 relative">
+                            <p className="text-sm font-medium text-gray-600">Email addresses</p>
+                            <div>
+                                <div className="flex flex-wrap items-center gap-2 text-sm text-gray-700">
+                                    <span>adstryker.bd@gmail.com</span>
+                                </div>
+
+                                <button
+                                    onClick={() =>
+                                        setShowDynamic(showDynamic === "email" ? null : "email")
+                                    }
+                                    className="text-sm text-[#6941C6] mt-1 hover:underline"
+                                >
+                                    + Add email address
+                                </button>
+
+                                {/* Inline Dynamic Modal for email */}
+                                {showDynamic === "email" && (
+                                    <div className="mt-4">
+                                        <DynamicModal
+                                            title="Add email address"
+                                            description="You'll need to verify this email address before it can be added to your account."
+                                            type="email"
+                                            onClose={() => setShowDynamic(null)}
+                                            onSubmit={(val) => {
+                                                console.log("Email submitted:", val);
+                                                setShowDynamic(null);
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex justify-end">
+                                <MoreVertical size={16} className="text-gray-400" />
+                            </div>
+                        </div>
+
+                        <div className="border-t border-gray-200" />
+
+                        {/* === PHONE NUMBERS === */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 items-start gap-4 relative">
+                            <p className="text-sm font-medium text-gray-600">Phone numbers</p>
+                            <div>
+                                <button
+                                    onClick={() =>
+                                        setShowDynamic(showDynamic === "phone" ? null : "phone")
+                                    }
+                                    className="text-sm text-[#6941C6] hover:underline"
+                                >
+                                    + Add phone number
+                                </button>
+
+                                {/* Inline Dynamic Modal for phone */}
+                                {showDynamic === "phone" && (
+                                    <div className="mt-4">
+                                        <DynamicModal
+                                            title="Add phone number"
+                                            description="A text message containing a verification code will be sent to this phone number. Message and data rates may apply."
+                                            type="phone"
+                                            onClose={() => setShowDynamic(null)}
+                                            onSubmit={(val) => {
+                                                console.log("Phone submitted:", val);
+                                                setShowDynamic(null);
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex justify-end">
+                                <MoreVertical size={16} className="text-gray-400" />
+                            </div>
+                        </div>
+
+                        <div className="border-t border-gray-200" />
+
+                        {/* === CONNECTED ACCOUNTS === */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 items-start gap-4">
+                            <p className="text-sm font-medium text-gray-600">
+                                Connected accounts
+                            </p>
+                            <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <Image
+                                        src="/google-icon.png"
+                                        alt="Google"
+                                        width={18}
+                                        height={18}
+                                    />
+                                    <p className="text-sm text-gray-700">
+                                        Google • adstryker.bd@gmail.com
+                                    </p>
+                                </div>
+                                <button className="text-sm text-[#6941C6] hover:underline">
+                                    + Connect account
+                                </button>
+                            </div>
+                            <div className="flex justify-end">
+                                <MoreVertical size={16} className="text-gray-400" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
