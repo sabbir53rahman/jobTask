@@ -17,7 +17,7 @@ export default function Navbar() {
 
   const { logOut } = useAuth();
   const dispatch = useDispatch();
-  const user: any = useSelector((state: RootState) => state.user.user);
+  const user = useSelector((state: RootState) => state.user.user);
   console.log(user)
 
   const handleLogout = async () => {
@@ -116,13 +116,13 @@ export default function Navbar() {
                       onClick={handleOpenAccountModal}
                       className="flex items-center gap-2 text-sm text-left px-4 py-2 hover:bg-gray-100 text-gray-700 rounded-md"
                     >
-                      <Settings className="size-4"/> Manage account
+                      <Settings className="size-4" /> Manage account
                     </button>
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-2 text-sm text-left px-4 py-2 hover:bg-gray-100 text-gray-700 rounded-md"
                     >
-                      <LogOut className="size-4"/> Sign out
+                      <LogOut className="size-4" /> Sign out
                     </button>
                   </div>
 
