@@ -88,7 +88,7 @@ export default function Navbar() {
           <div className="relative order-2 sm:order-2 w-full sm:w-auto flex justify-end sm:justify-end">
             <button
               onClick={toggleProfile}
-              className="flex items-center focus:outline-none"
+              className="flex items-center focus:outline-none mt-[-30px] sm:mt-0"
             >
               <Image
                 src={demoUser}
